@@ -16,8 +16,43 @@ function saveTask() {
     //create new task object
     const task = new Task(title, description, color, date, status, budget);
     console.log(task);
-    displayTask(task);
+    
+    // Send to the server
+    $.ajax({
+        type:"POST", //HTTP Verb: to create
+        url:API,
+        data:JSON.stringify(task),
+        contentType:"application/json",
+        success: function(created){
+            displayTask(task);
+            console.log(created);
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
 
+
+}
+
+//minichallenge 
+//use put method to update one of the existig entrys
+//tip: you must use the ID - url: API/ # -- https://106api-b0bnggbsgnezbzcz.westus3-01.azurewebsites.net/api/tasks
+//try to modify  the entry with ID=1, using a title that says "Hello my name is - your name"
+
+function changeName(){
+    $.ajax({
+        type:"PUT",
+        url:API + "/1",
+        data: JSON.stringify({title:"Hello my name is Rollie"}),
+        contentType: "aplication/json",
+        success: function(updated){
+        console.log(updated);
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
 }
 
     function displayTask(task) {
@@ -59,7 +94,8 @@ function loadTask(){
 
     $.ajax({
         type:"GET", //HTTP method to -READ
-        url: API, 
+        url: API,
+        dataType: "json", //Expected format
         success: function(data){
             console.log("Data received", data);
         }, 
